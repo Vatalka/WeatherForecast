@@ -1,5 +1,7 @@
 package com.weatherforecast.api;
 
+import androidx.annotation.NonNull;
+
 import java.io.IOException;
 
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory;
@@ -29,6 +31,7 @@ public class WeatherService {
     private OkHttpClient createOkHttpClient() {
         final OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(new Interceptor() {
+            @NonNull
             @Override
             public Response intercept(Chain chain) throws IOException {
                 final Request original = chain.request();
