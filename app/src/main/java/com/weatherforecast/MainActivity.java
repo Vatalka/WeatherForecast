@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tvForecast;
+    TextView tvForecast;
 
     // The Interface instance
     WeatherApi weatherApi;
