@@ -28,22 +28,23 @@ public class MainActivity extends AppCompatActivity {
 
         tvForecast = findViewById(R.id.tvForecast);
 
-        //Building a Retrofit instance
+        // Building a Retrofit instance
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.openweathermap.org")
-                .addConverterFactory(GsonConverterFactory.create())//Use Gson
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        //Use the retrofit instance to create the method body of JsonPlaceHolderApi Interface
+        // Use the retrofit instance to create the method body of JsonPlaceHolderApi Interface
         weatherApi = retrofit.create(WeatherApi.class);
 
         getUser();
     }
 
     public void getUser() {
-        //Execute the Network request
+        // Execute the Network request
         Call<Welcome> call = weatherApi.getWelcomes();
-        //Do in the background
+
+        // Do in the background
         call.enqueue(new Callback<Welcome>() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-                //Get the values
+                // Get the values
                 String content = "";
                 assert response.body() != null;
                 content += "name: " + response.body().getName() + "\n";
