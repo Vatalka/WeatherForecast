@@ -1,12 +1,29 @@
 package com.weatherforecast.api.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class Coord {
-    private double lon;
-    private double lat;
+    @SerializedName("lon")
+    @Expose
+    private long lon;
+    @SerializedName("lat")
+    @Expose
+    private long lat;
 
-    public double getLon() { return lon; }
-    public void setLon(double value) { this.lon = value; }
+    public long getLon() {
+        return lon;
+    }
 
-    public double getLat() { return lat; }
-    public void setLat(double value) { this.lat = value; }
+    public void setLon(long value) {
+        this.lon = value;
+    }
+
+    public long getLat() {
+        return lat;
+    }
+
+    public void setLat(long value) {
+        this.lat = value;
+    }
 }

@@ -1,25 +1,25 @@
 package com.weatherforecast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.weatherforecast.api.model.Welcome;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    private List<Welcome> welcomes;
-    TextView tvForecast;
+    private TextView tvForecast;
+
+    WeatherApi weatherApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,30 +27,46 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         tvForecast = findViewById(R.id.tvForecast);
-        welcomes = new ArrayList<>();
 
-        try {
-            Response response = App.getApi().getWelcome().execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //Building a Retrofit instance
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.openweathermap.org")
+                .addConverterFactory(GsonConverterFactory.create())//Use Gson
+                .build();
 
-        App.getApi().getWelcome().enqueue(new Callback<List<Welcome>>() {
-            @Override
-            public void onResponse(Call<List<Welcome>> call, Response<List<Welcome>> response) {
-                welcomes.addAll(response.body());
-                tvForecast.setText();
-            }
+        //Use the retrofit instance to create the method body of JsonPlaceHolderApi Interface
+        weatherApi = retrofit.create(WeatherApi.class);
 
-            @Override
-            public void onFailure(Call<List<Welcome>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Data loading error", Toast.LENGTH_LONG).show();
-            }
-        });
+        getUser();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void getUser() {
+        //Execute the Network request
+        Call<Welcome> call = weatherApi.getWelcomes();
+        //Do in the background
+        call.enqueue(new Callback<Welcome>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(@NonNull Call<Welcome> call, @NonNull Response<Welcome> response) {
+                if (!response.isSuccessful()) {
+                    tvForecast.setText("Code: " + response.code());
+                    return;
+                }
+
+                //Get the values
+                String content = "";
+                assert response.body() != null;
+                content += "name: " + response.body().getName() + "\n";
+                content += "country: " + response.body().getSys().getCountry() + "\n";
+
+                tvForecast.setText(content);
+            }
+
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onFailure(@NonNull Call<Welcome> call, @NonNull Throwable t) {
+                tvForecast.setText("Failure: " + t);
+            }
+        });
     }
 }
