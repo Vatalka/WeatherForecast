@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView tvForecast;
 
+    // The Interface instance
     WeatherApi weatherApi;
 
     @Override
@@ -26,11 +27,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Instantiate the textView
         tvForecast = findViewById(R.id.tvForecast);
 
         // Building a Retrofit instance
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.openweathermap.org")
+                .baseUrl("https://api.openweathermap.org/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         // Execute the Network request
         Call<Welcome> call = weatherApi.getWelcomes();
 
-        // Do in the background
+        // Execute the request in a background thread
         call.enqueue(new Callback<Welcome>() {
             @SuppressLint("SetTextI18n")
             @Override
