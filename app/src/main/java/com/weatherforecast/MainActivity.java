@@ -59,8 +59,16 @@ public class MainActivity extends AppCompatActivity {
                 // Get the values
                 String content = "";
                 assert response.body() != null;
-                content += "name: " + response.body().getName() + "\n";
-                content += "country: " + response.body().getSys().getCountry() + "\n";
+                content += "Страна: " + response.body().getSys().getCountry() + "\n";
+                content += "Населённый пункт: " + response.body().getName() + "\n";
+                content += "Температура: " + response.body().getMain().getTemp() + " °C" + "\n";
+                content += "Давление: " + response.body().getMain().getPressureMm() + " мм.рт.ст." + "\n";
+                content += "Облака: " + response.body().getClouds().getAll() + " %" +  "\n";
+                content += "Влажность: " + response.body().getMain().getHumidity() + " %" + "\n";
+                content += "Видимость: " + response.body().getVisibility() + " метров" + "\n";
+                content += "Скорость ветра: " + response.body().getWind().getSpeed() + " м/с." + "\n";
+                content += "Рассвет: " + response.body().getSys().getSunriseTime() + "\n";
+                content += "Закат: " + response.body().getSys().getSunsetTime() + "\n";
 
                 tvForecast.setText(content);
             }
