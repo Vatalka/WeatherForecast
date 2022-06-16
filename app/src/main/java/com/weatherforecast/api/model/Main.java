@@ -61,9 +61,13 @@ public class Main {
         this.tempMax = value;
     }
 
-    public long getPressure() {return pressure;}
+    public long getPressure() {
+        return pressure;
+    }
 
-    public void setPressure(long value) {this.pressure = value;}
+    public void setPressure(long value) {
+        this.pressure = value;
+    }
 
     public long getHumidity() {
         return humidity;
@@ -87,10 +91,5 @@ public class Main {
 
     public void setGrndLevel(long value) {
         this.grndLevel = value;
-    }
-
-    // давление в мм.рт.ст.
-    public double getPressureMm() {
-        return pressure * 0.750062;
     }
 }
