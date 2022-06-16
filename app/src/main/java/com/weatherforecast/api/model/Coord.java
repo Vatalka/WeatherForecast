@@ -6,12 +6,12 @@ import com.google.gson.annotations.SerializedName;
 public class Coord {
     @SerializedName("lon")
     @Expose
-    private long lon;
+    private double lon;
     @SerializedName("lat")
     @Expose
-    private long lat;
+    private double lat;
 
-    public long getLon() {
+    public double getLon() {
         return lon;
     }
 
@@ -19,7 +19,7 @@ public class Coord {
         this.lon = value;
     }
 
-    public long getLat() {
+    public double getLat() {
         return lat;
     }
 
