@@ -1,14 +1,7 @@
 package com.weatherforecast.api.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 public class Coord {
-    @SerializedName("lon")
-    @Expose
     private double lon;
-    @SerializedName("lat")
-    @Expose
     private double lat;
 
     public double getLon() {

@@ -1,32 +1,13 @@
 package com.weatherforecast.api.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 public class Main {
-    @SerializedName("temp")
-    @Expose
     private double temp;
-    @SerializedName("feelsLike")
-    @Expose
     private double feelsLike;
-    @SerializedName("tempMin")
-    @Expose
     private double tempMin;
-    @SerializedName("tempMax")
-    @Expose
     private double tempMax;
-    @SerializedName("pressure")
-    @Expose
     private long pressure;
-    @SerializedName("humidity")
-    @Expose
     private long humidity;
-    @SerializedName("seaLevel")
-    @Expose
     private long seaLevel;
-    @SerializedName("grndLevel")
-    @Expose
     private long grndLevel;
 
     public double getTemp() {

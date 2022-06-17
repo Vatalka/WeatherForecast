@@ -17,11 +17,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
+    // объявляю TextView
     TextView tvForecast;
 
-    // The Interface instance
+    // объявляю экземпляр интерфейса WeatherApi
     WeatherApi weatherApi;
 
+    // объявляю объект класса CompositeDisposable, который реализует интерфейс Disposable (RxJava3)
     CompositeDisposable disposable = new CompositeDisposable();
 
     @Override
@@ -29,22 +31,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Instantiate the textView
+        // инициализирую TextView
         tvForecast = findViewById(R.id.tvForecast);
 
+        // создаю перехватчик OkHttp, который регистрирует информацию о запросах и ответах
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
-        // Building a Retrofit instance
+        // строю экземпляр библиотеки Retrofit
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.openweathermap.org/")
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+                .baseUrl("https://api.openweathermap.org/") // базовый Url сайта
+                .client(client) // перехватчик OkHttp
+                .addConverterFactory(GsonConverterFactory.create()) // конвертер JSON объектов
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create()) // фабрика для корректного маппинга ответа
                 .build();
 
-        // Use the retrofit instance to create the method body of JsonPlaceHolderApi Interface
+        // использую объект retrofit для создания тела метода интерфейса JsonPlaceHolderApi
         weatherApi = retrofit.create(WeatherApi.class);
 
         callForecast();
@@ -52,10 +55,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void callForecast() {
         disposable.add(weatherApi.getWelcomes()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()) // задает поток для метода Observable.create()
+                .observeOn(AndroidSchedulers.mainThread()) // задаёт поток, на котором выполняются следующие операторы
                 .subscribe(welcome -> {
-                    // Get the values
+                    // получаю значения из model
                     String content = "";
                     content += "Страна: " + welcome.getSys().getCountry() + "\n";
                     content += "Населённый пункт: " + welcome.getName() + "\n";
@@ -74,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        disposable.dispose();
+        disposable.clear();
         super.onDestroy();
     }
 }
