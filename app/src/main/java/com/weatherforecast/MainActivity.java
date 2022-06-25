@@ -1,7 +1,11 @@
 package com.weatherforecast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.annotation.SuppressLint;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -17,6 +21,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
+    private int orientation;
+
     // объявляю TextView
     TextView tvForecast;
 
@@ -30,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        orientation = Configuration.ORIENTATION_PORTRAIT;
 
         // инициализирую TextView
         tvForecast = findViewById(R.id.tvForecast);
@@ -79,5 +87,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         disposable.clear();
         super.onDestroy();
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        orientation = newConfig.orientation;
+        setBackgroundImage(orientation);
+    }
+
+    @SuppressLint("ResourceType")
+    private void setBackgroundImage(final int orientation) {
+
+        ConstraintLayout layout;
+        layout = findViewById(R.id.myLayout);
+
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE)
+            layout.setBackgroundResource(R.drawable.background_weather_forecast_19201080);
+        else if (orientation == Configuration.ORIENTATION_PORTRAIT)
+            layout.setBackgroundResource(R.drawable.background_weather_forecast_10801920);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setBackgroundImage(orientation);
     }
 }
