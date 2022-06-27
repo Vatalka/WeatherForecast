@@ -1,9 +1,5 @@
 package com.weatherforecast.api.model;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 public class Sys {
     private String country;
     private long sunrise;
@@ -31,19 +27,5 @@ public class Sys {
 
     public void setSunset(long value) {
         this.sunset = value;
-    }
-
-    // рассвет в человекопонятное время
-    public String getSunriseTime() {
-        Date date = new Date(sunrise * 1000L);
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
-        return sdf.format(date);
-    }
-
-    // закат в человекопонятное время
-    public String getSunsetTime() {
-        Date date = new Date(sunset * 1000L);
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
-        return sdf.format(date);
     }
 }

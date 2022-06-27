@@ -1,40 +1,52 @@
 package com.weatherforecast.api.model;
 
+import androidx.annotation.NonNull;
+
 public class Weather {
     private long id;
     private String main;
     private String description;
     private String icon;
 
-    public long getID() {
+    @NonNull
+    @Override
+    public String toString() {
+        return "Weather:\n"
+                + "     id: " + id + "\n"
+                + "     main: " + main + "\n"
+                + "     description: " + description + "\n"
+                + "     icon: " + icon;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setID(long value) {
-        this.id = value;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getMain() {
         return main;
     }
 
-    public void setMain(String value) {
-        this.main = value;
+    public void setMain(String main) {
+        this.main = main;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String value) {
-        this.description = value;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getIcon() {
         return icon;
     }
 
-    public void setIcon(String value) {
-        this.icon = value;
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 }

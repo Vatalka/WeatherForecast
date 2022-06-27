@@ -1,4 +1,4 @@
-package com.weatherforecast;
+package com.weatherforecast.api;
 
 import com.weatherforecast.api.model.Welcome;
 

@@ -4,10 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import com.weatherforecast.api.WeatherApi;
+import com.weatherforecast.api.model.Weather;
+import com.weatherforecast.api.model.Welcome;
+
+import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -52,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 .baseUrl("https://api.openweathermap.org/") // базовый Url сайта
                 .client(client) // перехватчик OkHttp
                 .addConverterFactory(GsonConverterFactory.create()) // конвертер JSON объектов
-                .addCallAdapterFactory(RxJava3CallAdapterFactory.create()) // фабрика для корректного маппинга ответа
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create()) // фабрика для маппинга ответа
                 .build();
 
         // использую объект retrofit для создания тела метода интерфейса JsonPlaceHolderApi
@@ -64,23 +69,46 @@ public class MainActivity extends AppCompatActivity {
     public void callForecast() {
         disposable.add(weatherApi.getWelcomes()
                 .subscribeOn(Schedulers.io()) // задает поток для метода Observable.create()
-                .observeOn(AndroidSchedulers.mainThread()) // задаёт поток, на котором выполняются следующие операторы
+                .observeOn(AndroidSchedulers.mainThread()) // задаёт поток для следующих операторов
                 .subscribe(welcome -> {
                     // получаю значения из model
                     String content = "";
+                    content += "Координаты: \n"
+                            + "     широта: " + welcome.getCoord().getLat() + "\n"
+                            + "     долгота: " + welcome.getCoord().getLon() + "\n";
+                    content += "Погода: " + getWeather(welcome) + "\n";
+                    content += "База: " + welcome.getBase() + "\n";
+                    content += "Температура: " + welcome.getMain().getTemp() + " °C\n"
+                            + "     чувствуется как: " + welcome.getMain().getFeelsLike() + " °C\n"
+                            + "     минимальная: " + welcome.getMain().getTempMin() + " °C\n"
+                            + "     максимальная: " + welcome.getMain().getTempMax() + " °C\n";
+                    content += "Давление: " + Converter.hPaToMmHg(welcome.getMain().getPressure()) + "\n"
+                            + "     на уровне моря: " + Converter.hPaToMmHg(welcome.getMain().getSeaLevel()) + "\n"
+                            + "     на уровне земли: " + Converter.hPaToMmHg(welcome.getMain().getGrndLevel()) + "\n";
+                    content += "Влажность: " + welcome.getMain().getHumidity() + " %\n";
+                    content += "Видимость: " + Converter.metersToKm(welcome.getVisibility()) + "\n";
+                    content += "Скорость ветра: " + welcome.getWind().getSpeed() + " м/с\n";
+                    content += "     направление: " + welcome.getWind().getDeg() + "°\n";
+                    content += "     порывы: " + welcome.getWind().getGust() + " м/с\n";
+                    content += "Облака: " + welcome.getClouds().getAll() + " %\n";
+                    content += "Время расчёта данных: " + Converter.unixTimeToDate(welcome.getDt()) + "\n";
                     content += "Страна: " + welcome.getSys().getCountry() + "\n";
-                    content += "Населённый пункт: " + welcome.getName() + "\n";
-                    content += "Температура: " + welcome.getMain().getTemp() + " °C" + "\n";
-                    content += "Давление: " + welcome.getMain().getPressureMm() + " мм.рт.ст." + "\n";
-                    content += "Облака: " + welcome.getClouds().getAll() + " %" + "\n";
-                    content += "Влажность: " + welcome.getMain().getHumidity() + " %" + "\n";
-                    content += "Видимость: " + welcome.getVisibility() + " метров" + "\n";
-                    content += "Скорость ветра: " + welcome.getWind().getSpeed() + " м/с." + "\n";
-                    content += "Рассвет: " + welcome.getSys().getSunriseTime() + "\n";
-                    content += "Закат: " + welcome.getSys().getSunsetTime() + "\n";
+                    content += "Рассвет: " + Converter.unixTimeToDate(welcome.getSys().getSunrise()) + "\n";
+                    content += "Закат: " + Converter.unixTimeToDate(welcome.getSys().getSunset()) + "\n";
+                    content += "Часовой пояс: " + welcome.getTimezone() + " сек\n";
+                    content += "id города: " + welcome.getID() + "\n";
+                    content += "Город: " + welcome.getName() + "\n";
+                    content += "cod: " + welcome.getCod() + "\n";
 
                     tvForecast.setText(content);
                 }));
+    }
+
+    private String getWeather(Welcome welcome) {
+        if (welcome.getWeather().size() > 0) {
+            return welcome.getWeather().get(0).toString();
+        }
+        return "";
     }
 
     @Override
@@ -97,11 +125,8 @@ public class MainActivity extends AppCompatActivity {
         setBackgroundImage(orientation);
     }
 
-    @SuppressLint("ResourceType")
     private void setBackgroundImage(final int orientation) {
-
-        ConstraintLayout layout;
-        layout = findViewById(R.id.myLayout);
+        ConstraintLayout layout = findViewById(R.id.myLayout);
 
         if (orientation == Configuration.ORIENTATION_LANDSCAPE)
             layout.setBackgroundResource(R.drawable.background_weather_forecast_19201080);

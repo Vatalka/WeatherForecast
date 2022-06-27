@@ -1,13 +1,18 @@
 package com.weatherforecast.api.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Main {
     private double temp;
+    @SerializedName("feels_like")
     private double feelsLike;
-    private double tempMin;
-    private double tempMax;
+    private double temp_min;
+    private double temp_max;
     private long pressure;
     private long humidity;
+    @SerializedName("sea_level")
     private long seaLevel;
+    @SerializedName("grnd_level")
     private long grndLevel;
 
     public double getTemp() {
@@ -27,24 +32,28 @@ public class Main {
     }
 
     public double getTempMin() {
-        return tempMin;
+        return temp_min;
     }
 
     public void setTempMin(double value) {
-        this.tempMin = value;
+        this.temp_min = value;
     }
 
     public double getTempMax() {
-        return tempMax;
+        return temp_max;
     }
 
     public void setTempMax(double value) {
-        this.tempMax = value;
+        this.temp_max = value;
     }
 
-    public long getPressure() {return pressure;}
+    public long getPressure() {
+        return pressure;
+    }
 
-    public void setPressure(long value) {this.pressure = value;}
+    public void setPressure(long value) {
+        this.pressure = value;
+    }
 
     public long getHumidity() {
         return humidity;
@@ -68,10 +77,5 @@ public class Main {
 
     public void setGrndLevel(long value) {
         this.grndLevel = value;
-    }
-
-    // давление в мм.рт.ст.
-    public double getPressureMm() {
-        return pressure * 0.750062;
     }
 }
