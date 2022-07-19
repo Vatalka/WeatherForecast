@@ -1,4 +1,4 @@
-package com.weatherforecast.api.model;
+package com.weatherforecast.domain.models;
 
 import com.google.gson.annotations.SerializedName;
 

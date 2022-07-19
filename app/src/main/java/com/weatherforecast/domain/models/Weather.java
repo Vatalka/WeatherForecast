@@ -1,4 +1,4 @@
-package com.weatherforecast.api.model;
+package com.weatherforecast.domain.models;
 
 import androidx.annotation.NonNull;
 
@@ -11,10 +11,10 @@ public class Weather {
     @NonNull
     @Override
     public String toString() {
-        return "Weather:\n"
+        return "\n"
                 + "     id: " + id + "\n"
-                + "     main: " + main + "\n"
-                + "     description: " + description + "\n"
+                + "     в целом: " + main + "\n"
+                + "     описание: " + description + "\n"
                 + "     icon: " + icon;
     }
 

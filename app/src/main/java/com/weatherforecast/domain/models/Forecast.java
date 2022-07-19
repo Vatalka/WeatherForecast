@@ -1,8 +1,8 @@
-package com.weatherforecast.api.model;
+package com.weatherforecast.domain.models;
 
 import java.util.List;
 
-public class Welcome {
+public class Forecast {
     private Coord coord;
     private List<Weather> weather;
     private String base;

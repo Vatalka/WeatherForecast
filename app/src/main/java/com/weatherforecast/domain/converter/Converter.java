@@ -1,4 +1,4 @@
-package com.weatherforecast;
+package com.weatherforecast.domain.converter;
 
 import android.annotation.SuppressLint;
 
@@ -11,11 +11,11 @@ public class Converter {
 
     private static final double PRESSURE_MULTIPLAYER = 0.750062;
     @SuppressLint("ConstantLocale")
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("dd:MM:yyyy HH:mm:ss", Locale.getDefault());
+    private static final SimpleDateFormat sdf = new SimpleDateFormat(
+            "dd:MM:yyyy; HH:mm:ss", Locale.getDefault());
 
     // конвертирую hPa в мм рт.ст.
     public static String hPaToMmHg(long value) {
-
         String formattedDouble = String.format("%.2f", (double) value * PRESSURE_MULTIPLAYER);
         return formattedDouble + " мм рт.ст.";
     }
